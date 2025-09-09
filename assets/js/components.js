@@ -25,6 +25,17 @@ function getHeader() {
                 </ul>
                 
                 <ul class="navbar-nav">
+                    ${localStorage.getItem('isLoggedIn') === 'true' ? `
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>${localStorage.getItem('userName') || 'User'}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="handleLogout()">
+                                <i class="bi bi-box-arrow-right me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>` : `
                     <li class="nav-item">
                         <a class="nav-link" href="/pages/auth/login.html">
                             <i class="bi bi-box-arrow-in-right me-1"></i>Login
@@ -34,7 +45,7 @@ function getHeader() {
                         <a class="nav-link" href="/pages/auth/register.html">
                             <i class="bi bi-person-plus me-1"></i>Register
                         </a>
-                    </li>
+                    </li>`}
                 </ul>
             </div>
         </div>
@@ -114,7 +125,26 @@ function setFavicon() {
     document.head.appendChild(favicon);
 }
 
+
+export { loadComponents, setFavicon };
+
+// Global logout function
+window.handleLogout = function() {
+    if (confirm('Are you sure you want to logout?')) {
+       
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userEmail');
+        localStorage.removeItem('userName');
+        
+        alert('Logged out successfully!');
+        
+        window.location.href = '/index.html';
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     setFavicon();
     loadComponents();
 });
+
+console.log('Components.js loaded successfully');
