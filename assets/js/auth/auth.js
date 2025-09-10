@@ -78,6 +78,7 @@ export function logout() {
     return { success: true, message: 'Logged out successfully' };
 }
 
+// Check if the user is logged in
 export function isLoggedIn() {
     return localStorage.getItem('isLoggedIn') === 'true';
 }
@@ -94,12 +95,13 @@ export function getCurrentUser() {
     };
 }
 
-// Helper functions
+// Helper functions (Checks if it is a valid email)
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 }
 
+// Fetches the registered users from local storage
 function getRegisteredUsers() {
     const users = localStorage.getItem('registeredUsers');
     return users ? JSON.parse(users) : [];

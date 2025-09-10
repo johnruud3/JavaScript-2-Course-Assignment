@@ -31,6 +31,8 @@ function getHeader() {
                             <i class="bi bi-person-circle me-1"></i>${localStorage.getItem('userName') || 'User'}
                         </a>
                         <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/pages/auth/user-profile.html">
+                            <i class="bi bi-person-circle me-2 "></i>Your profile</a></li>
                             <li><a class="dropdown-item" href="#" onclick="handleLogout()">
                                 <i class="bi bi-box-arrow-right me-2"></i>Logout
                             </a></li>
