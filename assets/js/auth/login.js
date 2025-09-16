@@ -33,21 +33,18 @@ function setupLoginForm() {
         return;
     }
     
-    loginForm.addEventListener('submit', function(e) {
+    loginForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const email = emailInput.value.trim();
         const password = passwordInput.value;
         
         clearMessages();
-        
         setLoadingState(true);
         
-        // delay simulation (like an API call)
-        setTimeout(() => {
-            const result = login(email, password);
+        try {
+            const result = await login(email, password);
             
-            // Remove the loading
             setLoadingState(false);
             
             if (result.success) {
@@ -62,7 +59,10 @@ function setupLoginForm() {
                 passwordInput.value = '';
                 passwordInput.focus();
             }
-        }, 500);
+        } catch (error) {
+            setLoadingState(false);
+            showMessage('Network error - please try again');
+        }
     });
     
     // Testing email validation
@@ -75,7 +75,7 @@ function setupLoginForm() {
         }
     });
     
-    // Clearing the errors when user starts typing
+    // Clearing the errors when user starts typing (LOOK OVER THIS!!!)
     emailInput.addEventListener('input', function() {
         clearFieldError(this);
     });

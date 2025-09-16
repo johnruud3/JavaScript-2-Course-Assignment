@@ -17,11 +17,12 @@ function getHeader() {
                             <i class="bi bi-house me-1"></i>Home
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/pages/posts/create-post.html">
-                            <i class="bi bi-plus-circle me-1"></i>Create Post
-                        </a>
-                    </li>
+                ${localStorage.getItem('isLoggedIn') === 'true' ? `
+                <li class="nav-item">
+                    <a class="nav-link" href="/pages/posts/create-post.html">
+                        <i class="bi bi-plus-circle me-1"></i>Create Post
+                    </a>
+                </li>` : ''}
                 </ul>
                 
                 <ul class="navbar-nav">
