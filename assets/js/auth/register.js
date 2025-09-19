@@ -1,7 +1,7 @@
 import { loadComponents, setFavicon} from '../components.js';
 import { register, isLoggedIn, getCurrentUser} from './auth.js';
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     setFavicon();
     loadComponents();
      checkIfAlreadyLoggedIn();

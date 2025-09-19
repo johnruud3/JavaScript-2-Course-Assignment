@@ -42,11 +42,13 @@ export async function login(email, password) {
 
 export function getAuthHeaders() {
     const token = localStorage.getItem('accessToken');
+    const apiKey = '63c75ef6-8dce-41bb-99ce-34f4730e150e';
     return {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      'X-Noroff-API-Key': apiKey,
     };
-}
+  }
 
 export async function register(email, password, confirmPassword, name = '') {
     console.log('Register function called with email:', email); 

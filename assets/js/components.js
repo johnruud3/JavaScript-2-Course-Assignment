@@ -134,7 +134,7 @@ function setFavicon() {
 export { loadComponents, setFavicon };
 
 // Global logout function
-window.handleLogout = function() {
+window.handleLogout = () => {
     if (confirm('Are you sure you want to logout?')) {
        
         localStorage.removeItem('isLoggedIn');
@@ -147,7 +147,7 @@ window.handleLogout = function() {
     }
 };
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     setFavicon();
     loadComponents();
 });

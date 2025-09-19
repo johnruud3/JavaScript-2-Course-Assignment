@@ -3,7 +3,7 @@ import { login, isLoggedIn, getCurrentUser } from './auth.js';
 
 console.log('Login.js module loaded successfully');
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     setFavicon();
     loadComponents();
     
@@ -33,7 +33,7 @@ function setupLoginForm() {
         return;
     }
     
-    loginForm.addEventListener('submit', async function(e) {
+    loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const email = emailInput.value.trim();
@@ -66,7 +66,7 @@ function setupLoginForm() {
     });
     
     // Testing email validation
-    emailInput.addEventListener('blur', function() {
+    emailInput.addEventListener('blur', () => {
         const email = this.value.trim();
         if (email && !isValidEmail(email)) {
             showFieldError(this, 'Please enter a valid email address');
@@ -76,11 +76,11 @@ function setupLoginForm() {
     });
     
     // Clearing the errors when user starts typing (LOOK OVER THIS!!!)
-    emailInput.addEventListener('input', function() {
+    emailInput.addEventListener('input', () => {
         clearFieldError(this);
     });
     
-    passwordInput.addEventListener('input', function() {
+    passwordInput.addEventListener('input', () => {
         clearFieldError(this);
     });
 }
