@@ -47,20 +47,23 @@ async function renderMyPosts(profileName) {
       
     
       return `
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="card h-100">
-            ${img}
-            <div class="card-body text-center">
-              <h5 class="card-title">${titleText}</h5>
-              <p class="card-text mb-0">${previewText}</p>
-            </div>
-            <div class="card-footer d-flex justify-content-between align-items-center">
-              <small class="text-muted">${created}</small>
-              <a href="../posts/single-post.html?id=${post.id}" class="btn btn-sm btn-info text-white">View</a>
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100">
+          ${img}
+          <div class="card-body text-center">
+            <h5 class="card-title">${titleText}</h5>
+            <p class="card-text mb-0">${previewText}</p>
+          </div>
+          <div class="card-footer d-flex justify-content-between align-items-center">
+            <small class="text-muted">${created}</small>
+            <div>
+              <a href="../posts/single-post.html?id=${post.id}" class="btn btn-sm btn-info text-white me-1">View</a>
+              <a href="../posts/edit-post.html?id=${post.id}" class="btn btn-sm btn-warning text-white">Edit</a>
             </div>
           </div>
         </div>
-      `;
+      </div>
+    `;
     }).join('');
   } catch (error) {
     console.error(error);

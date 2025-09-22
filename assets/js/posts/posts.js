@@ -50,3 +50,75 @@ export async function getAllPosts() {
         return { success: false, message: error.message || 'Network error' };
     }
 }
+
+export async function getPost(id) {
+    try {
+        const response = await fetch(`https://v2.api.noroff.dev/social/posts/${id}`, {
+            method: 'GET',
+            headers: getAuthHeaders()
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+            const message = result?.errors?.[0]?.message || `HTTP ${response.status}`;
+            console.error('Get post failed:', { status: response.status, result });
+            return { success: false, message };
+        }
+        
+        return { success: true, data: result.data };
+    } catch (error) {
+        console.error('Get post network error:', error);
+        return { success: false, message: error.message || 'Network error' };
+    }
+}
+
+// Update a post
+export async function updatePost(id, postData) {
+    try {
+        const response = await fetch(`https://v2.api.noroff.dev/social/posts/${id}`, {
+            method: 'PUT',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({
+                title: postData.title,
+                body: postData.body,
+                tags: postData.tags || [],
+                media: postData.media || { url: '', alt: '' }
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+            const message = result?.errors?.[0]?.message || `HTTP ${response.status}`;
+            console.error('Update post failed:', { status: response.status, result });
+            return { success: false, message };
+        }
+        
+        return { success: true, data: result.data, message: 'Post updated successfully' };
+    } catch (error) {
+        console.error('Update post network error:', error);
+        return { success: false, message: error.message || 'Network error' };
+    }
+}
+
+export async function deletePost(id) {
+    try {
+        const response = await fetch(`https://v2.api.noroff.dev/social/posts/${id}`, {
+            method: 'DELETE',
+            headers: getAuthHeaders()
+        });
+
+        if (!response.ok) {
+            const result = await response.json();
+            const message = result?.errors?.[0]?.message || `HTTP ${response.status}`;
+            console.error('Delete post failed:', { status: response.status, result });
+            return { success: false, message };
+        }
+
+        return { success: true, message: 'Post deleted successfully' };
+    } catch (error) {
+        console.error('Delete post network error:', error);
+        return { success: false, message: error.message || 'Network error' };
+    }
+}
