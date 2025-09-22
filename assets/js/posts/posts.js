@@ -31,7 +31,7 @@ export async function createPost(postData) {
 // Get all posts from the API
 export async function getAllPosts() {
     try {
-        const response = await fetch('https://v2.api.noroff.dev/social/posts', {
+        const response = await fetch('https://v2.api.noroff.dev/social/posts?_author=true', {
             method: 'GET',
             headers: getAuthHeaders()
         });
@@ -47,6 +47,32 @@ export async function getAllPosts() {
         return { success: true, data: result.data, meta: result.meta };
     } catch (error) {
         console.error('Get posts network error:', error);
+        return { success: false, message: error.message || 'Network error' };
+    }
+}
+
+// Get all posts by a specific profile, with URL safety for username.
+export async function getPostsByProfile(profileName) {
+    if (!profileName) {
+        return { success: false, message: 'Profile name is required' };
+    }
+    try {
+        const response = await fetch(`https://v2.api.noroff.dev/social/profiles/${encodeURIComponent(profileName)}/posts?_author=true`, {
+            method: 'GET',
+            headers: getAuthHeaders()
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            const message = result?.errors?.[0]?.message || `HTTP ${response.status}`;
+            console.error('Get posts by profile failed:', { status: response.status, result });
+            return { success: false, message };
+        }
+
+        return { success: true, data: result.data, meta: result.meta };
+    } catch (error) {
+        console.error('Get posts by profile network error:', error);
         return { success: false, message: error.message || 'Network error' };
     }
 }
