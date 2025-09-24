@@ -12,7 +12,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   
     const user = getCurrentUser();
-    await renderMyPosts(user.name);
+  await Promise.all([
+    renderMyPosts(user.name),
+    renderFollowingPanel(user.name)
+  ]);
   });
 
 // "Loading" Your profile posts from the API
@@ -69,4 +72,43 @@ async function renderMyPosts(profileName) {
     console.error(error);
     container.innerHTML = '<p class="text-danger text-center">Failed to load posts.</p>';
   }
+}
+
+async function renderFollowingPanel(profileName) {
+  const listEl = document.getElementById('followingList');
+  const loadEl = document.getElementById('followingLoading');
+  const errEl = document.getElementById('followingError');
+  const refreshBtn = document.getElementById('refreshFollowing');
+
+  if (!listEl || !loadEl || !errEl || !refreshBtn) return;
+
+  const load = async () => {
+    errEl.classList.add('d-none');
+    loadEl.classList.remove('d-none');
+    listEl.innerHTML = '';
+
+    const res = await fetch(`https://v2.api.noroff.dev/social/profiles/${encodeURIComponent(profileName)}?_following=true`, {
+      headers: getAuthHeaders(),
+    });
+    const result = await res.json();
+    const following = result?.data?.following || [];
+    listEl.innerHTML = following.length
+      ? following.map(f => {
+          const name = (f?.name || 'Unknown');
+          const avatar = f?.avatar?.url ? f.avatar.url : '';
+          const alt = f?.avatar?.alt || `${name} avatar`;
+          return `
+            <li class="list-group-item d-flex align-items-center">
+              ${avatar ? `<img src="${avatar}" alt="${alt}" class="rounded-circle me-2" width="28" height="28">` : `<span class="rounded-circle bg-secondary d-inline-flex justify-content-center align-items-center me-2" style="width:28px;height:28px;color:white;font-size:.8rem;">${name.charAt(0).toUpperCase()}</span>`}
+              <span class="me-auto">${name}</span>
+              <a class="btn btn-sm btn-outline-info" href="/pages/posts/user-post.html?author=${encodeURIComponent(name)}">View</a>
+            </li>`;
+        }).join('')
+      : '<li class="list-group-item text-muted">You are not following anyone yet.</li>';
+
+    loadEl.classList.add('d-none');
+  };
+
+  refreshBtn.addEventListener('click', load);
+  await load();
 }

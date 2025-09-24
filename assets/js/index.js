@@ -87,6 +87,8 @@ function setupSearch(postsContainer) {
     });
 }
 
+
+
 function createPostCardHtml(post) {
     const title = sanitizeText(post?.title) || 'Untitled';
     const body = sanitizeText(post?.body) || '';
@@ -109,14 +111,14 @@ function createPostCardHtml(post) {
                 <p class="card-text text-muted mb-2">${truncate(body, 140)}</p>
                 <div class="mt-auto d-flex flex-column">
                     <div class="d-flex align-items-center mb-2">
-                        ${authorAvatar ? `<img src="${authorAvatar}" alt="${authorAlt}" class="rounded-circle me-2" width="28" height="28">` : `<span class="rounded-circle bg-secondary d-inline-flex justify-content-center align-items-center me-2" style="width:28px;height:28px;color:white;font-size:.8rem;">${authorName.charAt(0).toUpperCase()}</span>`}
+                        ${authorAvatar ? `<img src="${authorAvatar}" class="rounded-circle me-2" width="28" height="28">` : `<span class="rounded-circle bg-secondary d-inline-flex justify-content-center align-items-center me-2" style="width:28px;height:28px;color:white;font-size:.8rem;">${authorName.charAt(0).toUpperCase()}</span>`}
                         <small class="text-body-secondary">${authorName}</small>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-secondary">${created}</small>
-                        <div class="text-nowrap">
+                         <div class="text-nowrap">
                             <span class="me-3"><i class="bi bi-chat"></i> ${comments}</span>
-                            <span><i class="bi bi-hand-thumbs-up"></i> ${reactions}</span>
+                            <button><i class="bi bi-hand-thumbs-up"></i> ${reactions}</button>
                         </div>
                     </div>
                 </div>
