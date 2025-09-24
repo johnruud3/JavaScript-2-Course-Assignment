@@ -79,11 +79,14 @@ function createSinglePostHtml(post) {
     const title = sanitizeText(post?.title) || 'Untitled';
     const body = sanitizeText(post?.body) || '';
     const created = formatDate(post?.created);
+    const comments = Number(post?._count?.comments || 0);
+    const reactions = Number(post?._count?.reactions || 0);
     const imageUrl = sanitizeUrl(post?.media?.url);
     const imageAlt = sanitizeText(post?.media?.alt) || title;
     const authorName = sanitizeText(post?.author?.name) || 'Unknown';
     const authorAvatar = sanitizeUrl(post?.author?.avatar?.url);
     const authorAlt = sanitizeText(post?.author?.avatar?.alt) || `${authorName} avatar`;
+    const profileUrl = `/pages/posts/user-post.html?author=${encodeURIComponent(authorName)}`;
 
     return `
     <article class="card shadow-sm">
@@ -91,8 +94,10 @@ function createSinglePostHtml(post) {
         <div class="card-body">
             <h1 class="h3">${title}</h1>
             <div class="d-flex align-items-center mb-3">
-                ${authorAvatar ? `<img src="${authorAvatar}" alt="${authorAlt}" class="rounded-circle me-2" width="32" height="32">` : `<span class="rounded-circle bg-secondary d-inline-flex justify-content-center align-items-center me-2" style="width:32px;height:32px;color:white;">${authorName.charAt(0).toUpperCase()}</span>`}
-                <small class="text-body-secondary">${authorName}</small>
+                <a href="${profileUrl}" class="d-inline-flex align-items-center text-decoration-none">
+                    ${authorAvatar ? `<img src="${authorAvatar}" alt="${authorAlt}" class="rounded-circle me-2" width="32" height="32">` : `<span class="rounded-circle bg-secondary d-inline-flex justify-content-center align-items-center me-2" style="width:32px;height:32px;color:white;">${authorName.charAt(0).toUpperCase()}</span>`}
+                    <small class="text-body-secondary">${authorName}</small>
+                </a>
                 <div class="ms-auto d-flex align-items-center gap-2">
                     <button id="followBtn" type="button" class="btn btn-outline-info btn-sm" data-author="${authorName}" data-following="false">
                         <i class="bi bi-person-plus"></i> Follow
@@ -100,6 +105,10 @@ function createSinglePostHtml(post) {
                     <small class="text-secondary">${created}</small>
                 </div>
             </div>
+             <div class="d-flex justify-content-end text-nowrap">
+                            <span class="me-3"><i class="bi bi-chat"></i> ${comments}</span>
+                            <button><i class="bi bi-hand-thumbs-up"></i> ${reactions}</button>
+                        </div>
             <p class="mb-0">${body.replace(/\n/g, '<br>')}</p>
         </div>
     </article>`;

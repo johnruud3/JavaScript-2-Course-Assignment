@@ -4,6 +4,17 @@ import { getPostsByProfile } from './posts.js';
 document.addEventListener('DOMContentLoaded', () => {
     setFavicon();
     loadComponents();
+    const back = document.getElementById('backLink');
+    if (back) {
+        back.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = '/';
+            }
+        });
+    }
     initUserPostsPage();
 });
 
@@ -46,6 +57,7 @@ function createPostCardHtml(post) {
     const authorName = sanitizeText(post?.author?.name) || 'Unknown';
     const authorAvatar = sanitizeUrl(post?.author?.avatar?.url);
     const authorAlt = sanitizeText(post?.author?.avatar?.alt) || `${authorName} avatar`;
+    const profileUrl = `/pages/posts/user-post.html?author=${encodeURIComponent(authorName)}`;
 
     return `
     <div class="col-12 col-sm-6 col-lg-4">
@@ -56,8 +68,10 @@ function createPostCardHtml(post) {
                 <p class="card-text text-muted mb-2">${truncate(body, 140)}</p>
                 <div class="mt-auto d-flex flex-column">
                     <div class="d-flex align-items-center mb-2">
-                        ${authorAvatar ? `<img src="${authorAvatar}" alt="${authorAlt}" class="rounded-circle me-2" width="28" height="28">` : `<span class="rounded-circle bg-secondary d-inline-flex justify-content-center align-items-center me-2" style="width:28px;height:28px;color:white;font-size:.8rem;">${authorName.charAt(0).toUpperCase()}</span>`}
-                        <small class="text-body-secondary">${authorName}</small>
+                        <a href="${profileUrl}" class="d-inline-flex align-items-center text-decoration-none">
+                            ${authorAvatar ? `<img src="${authorAvatar}" alt="${authorAlt}" class="rounded-circle me-2" width="28" height="28">` : `<span class="rounded-circle bg-secondary d-inline-flex justify-content-center align-items-center me-2" style="width:28px;height:28px;color:white;font-size:.8rem;">${authorName.charAt(0).toUpperCase()}</span>`}
+                            <small class="text-body-secondary">${authorName}</small>
+                        </a>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-secondary">${created}</small>

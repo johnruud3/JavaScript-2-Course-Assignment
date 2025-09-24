@@ -101,18 +101,22 @@ function createPostCardHtml(post) {
     const authorName = sanitizeText(post?.author?.name) || 'Unknown';
     const authorAvatar = sanitizeUrl(post?.author?.avatar?.url);
     const authorAlt = sanitizeText(post?.author?.avatar?.alt) || `${authorName} avatar`;
+    const profileUrl = `/pages/posts/user-post.html?author=${encodeURIComponent(authorName)}`;
+    const postUrl = postId !== undefined ? `/pages/posts/single-post.html?id=${encodeURIComponent(postId)}` : '';
 
     return `
     <div class="col-12 col-sm-6 col-lg-4">
         <div class="card h-100 shadow-sm">
-            ${imageUrl ? `<img src="${imageUrl}" class="card-img-top" alt="${imageAlt}">` : ''}
+            ${imageUrl ? (postUrl ? `<a href="${postUrl}" class="text-decoration-none"><img src="${imageUrl}" class="card-img-top" alt="${imageAlt}"></a>` : `<img src="${imageUrl}" class="card-img-top" alt="${imageAlt}">`) : ''}
             <div class="card-body d-flex flex-column">
-                <h5 class="card-title">${title}</h5>
+                <h5 class="card-title">${postUrl ? `<a href="${postUrl}" class="text-decoration-none">${title}</a>` : title}</h5>
                 <p class="card-text text-muted mb-2">${truncate(body, 140)}</p>
                 <div class="mt-auto d-flex flex-column">
                     <div class="d-flex align-items-center mb-2">
-                        ${authorAvatar ? `<img src="${authorAvatar}" class="rounded-circle me-2" width="28" height="28">` : `<span class="rounded-circle bg-secondary d-inline-flex justify-content-center align-items-center me-2" style="width:28px;height:28px;color:white;font-size:.8rem;">${authorName.charAt(0).toUpperCase()}</span>`}
-                        <small class="text-body-secondary">${authorName}</small>
+                        <a href="${profileUrl}" class="d-inline-flex align-items-center text-decoration-none">
+                            ${authorAvatar ? `<img src="${authorAvatar}" alt="${authorAlt}" class="rounded-circle me-2" width="28" height="28">` : `<span class="rounded-circle bg-secondary d-inline-flex justify-content-center align-items-center me-2" style="width:28px;height:28px;color:white;font-size:.8rem;">${authorName.charAt(0).toUpperCase()}</span>`}
+                            <small class="text-body-secondary">${authorName}</small>
+                        </a>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-secondary">${created}</small>
@@ -122,11 +126,11 @@ function createPostCardHtml(post) {
                         </div>
                     </div>
                 </div>
-                ${postId !== undefined ? `<a href="/pages/posts/single-post.html?id=${encodeURIComponent(postId)}" class="stretched-link"></a>` : ''}
             </div>
         </div>
     </div>`;
 }
+
 
 // Cutting text to have controll over how much text are beeing used on the cards in homepage.
 function truncate(text, max) {
