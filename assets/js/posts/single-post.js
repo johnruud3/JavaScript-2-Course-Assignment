@@ -114,7 +114,7 @@ function createSinglePostHtml(post) {
                     <small class="text-body-secondary">${authorName}</small>
                 </a>
                 <div class="ms-auto d-flex align-items-center gap-2">
-                    <button id="followBtn" type="button" class="btn btn-outline-info btn-sm" data-author="${authorName}" data-following="false">
+                    <button id="followBtn" type="button" class="btn btn-outline-info btn-sm py-0 px-1 py-sm-1 px-sm-2" data-author="${authorName}" data-following="false">
                         <i class="bi bi-person-plus"></i> Follow
                     </button>
                     <small class="text-secondary">${created}</small>
@@ -155,49 +155,43 @@ async function setupFollowButton(authorName) {
     const btn = document.getElementById('followBtn');
     if (!btn || !authorName) return;
 
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-        btn.disabled = true;
-        btn.title = 'Login to follow';
-        return;
-    }
-
-    // Determine initial state by checking if current user already follows the author
-    try {
-        const current = getCurrentUser();
-        if (current?.name) {
-            const res = await fetch(`https://v2.api.noroff.dev/social/profiles/${encodeURIComponent(current.name)}?_following=true`, {
-                headers: getAuthHeaders(),
-            });
-            const result = await res.json();
-            if (res.ok) {
-                const following = result?.data?.following || [];
-                const isFollowing = following.some(f => (f?.name || '').toLowerCase() === authorName.toLowerCase());
-                setFollowButtonState(btn, isFollowing);
+    
+    const hasToken = !!localStorage.getItem('accessToken');
+    if (hasToken) {
+        try {
+            const current = getCurrentUser();
+            if (current?.name) {
+                const res = await fetch(`https://v2.api.noroff.dev/social/profiles/${encodeURIComponent(current.name)}?_following=true`, {
+                    headers: getAuthHeaders(),
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    const following = result?.data?.following || [];
+                    const isFollowing = following.some(f => (f?.name || '').toLowerCase() === authorName.toLowerCase());
+                    setFollowButtonState(btn, isFollowing);
+                }
             }
+        } catch (_) {
+            // ignore these errors
         }
-    } catch (_) {
-        // ignore init errors
     }
 
     btn.addEventListener('click', async () => {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const token = localStorage.getItem('accessToken');
+        if (!isLoggedIn || !token) {
+            alert('You must be logged in to follow!');
+            return;
+        }
+
         const isFollowing = btn.getAttribute('data-following') === 'true';
         btn.disabled = true;
         try {
-            if (isFollowing) {
-                const res = await unfollowProfile(authorName);
-                if (res.success) {
-                    setFollowButtonState(btn, false);
-                } else {
-                    alert(res.message || 'Failed to unfollow');
-                }
+            const res = isFollowing ? await unfollowProfile(authorName) : await followProfile(authorName);
+            if (res.success) {
+                setFollowButtonState(btn, !isFollowing);
             } else {
-                const res = await followProfile(authorName);
-                if (res.success) {
-                    setFollowButtonState(btn, true);
-                } else {
-                    alert(res.message || 'Failed to follow');
-                }
+                alert(res.message || (isFollowing ? 'Failed to unfollow' : 'Failed to follow'));
             }
         } finally {
             btn.disabled = false;

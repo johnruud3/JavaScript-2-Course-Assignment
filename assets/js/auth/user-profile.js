@@ -61,7 +61,7 @@ async function renderMyPosts(profileName) {
             <small class="text-muted">${created}</small>
             <div>
               <a href="../posts/single-post.html?id=${post.id}" class="btn btn-sm btn-info text-white me-1">View</a>
-              <a href="../posts/edit-post.html?id=${post.id}" class="btn btn-sm btn-warning text-white">Edit</a>
+              <a href="../posts/edit-post.html?id=${post.id}" class="btn btn-sm btn-warning text-white mt-1">Edit</a>
             </div>
           </div>
         </div>
@@ -74,6 +74,7 @@ async function renderMyPosts(profileName) {
   }
 }
 
+// Following panel
 async function renderFollowingPanel(profileName) {
   const listEl = document.getElementById('followingList');
   const loadEl = document.getElementById('followingLoading');
@@ -101,12 +102,41 @@ async function renderFollowingPanel(profileName) {
             <li class="list-group-item d-flex align-items-center">
               ${avatar ? `<img src="${avatar}" alt="${alt}" class="rounded-circle me-2" width="28" height="28">` : `<span class="rounded-circle bg-secondary d-inline-flex justify-content-center align-items-center me-2" style="width:28px;height:28px;color:white;font-size:.8rem;">${name.charAt(0).toUpperCase()}</span>`}
               <span class="me-auto">${name}</span>
-              <a class="btn btn-sm btn-outline-info" href="/pages/posts/user-post.html?author=${encodeURIComponent(name)}">View</a>
+              <div class="d-flex flex-column flex-sm-row gap-2">
+                <a class="btn btn-sm btn-outline-info w-100 w-sm-auto" href="/pages/posts/user-post.html?author=${encodeURIComponent(name)}">View</a>
+                <button type="button" class="btn btn-sm btn-outline-danger unfollow-btn w-100 w-sm-auto" data-name="${name}">Unfollow</button>
+              </div>
             </li>`;
         }).join('')
       : '<li class="list-group-item text-muted">You are not following anyone yet.</li>';
 
     loadEl.classList.add('d-none');
+
+    listEl.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.unfollow-btn');
+      if (!btn) return;
+    
+      const profile = btn.getAttribute('data-name');
+      if (!profile) return;
+    
+      if (!confirm(`Unfollow ${profile}?`)) return;
+    
+      try {
+        const res = await fetch(`https://v2.api.noroff.dev/social/profiles/${encodeURIComponent(profile)}/unfollow`, {
+          method: 'PUT',
+          headers: getAuthHeaders(),
+        });
+        const result = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          alert(result?.errors?.[0]?.message || `HTTP ${res.status}`);
+          return;
+        }
+        // Refresh list
+        await load();
+      } catch (err) {
+        alert(err?.message || 'Network error');
+      }
+    });
   };
 
   refreshBtn.addEventListener('click', load);

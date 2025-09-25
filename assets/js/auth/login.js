@@ -65,23 +65,23 @@ function setupLoginForm() {
         }
     });
     
-    // Testing email validation
+
     emailInput.addEventListener('blur', () => {
-        const email = this.value.trim();
+        const email = emailInput.value.trim();
         if (email && !isValidEmail(email)) {
-            showFieldError(this, 'Please enter a valid email address');
+            showFieldError(emailInput, 'Please enter a valid email address');
         } else {
-            clearFieldError(this);
+            clearFieldError(emailInput);
         }
     });
     
-    // Clearing the errors when user starts typing (LOOK OVER THIS!!!)
+    // Replace input handlers
     emailInput.addEventListener('input', () => {
-        clearFieldError(this);
+        clearFieldError(emailInput);
     });
     
     passwordInput.addEventListener('input', () => {
-        clearFieldError(this);
+        clearFieldError(passwordInput);
     });
 }
 
@@ -145,8 +145,11 @@ function showFieldError(field, message) {
 }
 
 function clearFieldError(field) {
+    if (!field) return;
     field.classList.remove('is-invalid');
-    const errorDiv = field.parentNode.querySelector('.invalid-feedback');
+    const parent = field.parentNode;
+    if (!parent) return;
+    const errorDiv = parent.querySelector('.invalid-feedback');
     if (errorDiv) {
         errorDiv.remove();
     }
