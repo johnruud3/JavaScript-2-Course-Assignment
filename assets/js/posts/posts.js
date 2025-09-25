@@ -31,7 +31,7 @@ export async function createPost(postData) {
 // Get all posts from the API
 export async function getAllPosts() {
     try {
-        const response = await fetch('https://v2.api.noroff.dev/social/posts?_author=true', {
+        const response = await fetch('https://v2.api.noroff.dev/social/posts?_author=true&_reactions=true', {
             method: 'GET',
             headers: getAuthHeaders()
         });
@@ -57,7 +57,7 @@ export async function getPostsByProfile(profileName) {
         return { success: false, message: 'Profile name is required' };
     }
     try {
-        const response = await fetch(`https://v2.api.noroff.dev/social/profiles/${encodeURIComponent(profileName)}/posts?_author=true`, {
+        const response = await fetch(`https://v2.api.noroff.dev/social/profiles/${encodeURIComponent(profileName)}/posts?_author=true&_reactions=true`, {
             method: 'GET',
             headers: getAuthHeaders()
         });
@@ -79,7 +79,7 @@ export async function getPostsByProfile(profileName) {
 
 export async function getPost(id) {
     try {
-        const response = await fetch(`https://v2.api.noroff.dev/social/posts/${id}?_author=true`, {
+        const response = await fetch(`https://v2.api.noroff.dev/social/posts/${id}?_author=true&_reactions=true`, {
             method: 'GET',
             headers: getAuthHeaders()
         });
