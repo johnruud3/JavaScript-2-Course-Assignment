@@ -113,7 +113,7 @@ function createPostCardHtml(post) {
         <div class="card h-100 shadow-sm">
             ${imageUrl ? (postUrl ? `<a href="${postUrl}" class="text-decoration-none"><img src="${imageUrl}" class="card-img-top" alt="${imageAlt}"></a>` : `<img src="${imageUrl}" class="card-img-top" alt="${imageAlt}">`) : ''}
             <div class="card-body d-flex flex-column">
-                <h5 class="card-title">${postUrl ? `<a href="${postUrl}" class="text-decoration-none">${title}</a>` : title}</h5>
+                <h5 class="card-title">${postUrl ? `<a href="${postUrl}" class="text-info text-decoration-none">${title}</a>` : title}</h5>
                 <p class="card-text text-muted mb-2">${truncate(body, 140)}</p>
                 <div class="mt-auto d-flex flex-column">
                     <div class="d-flex align-items-center mb-2">
