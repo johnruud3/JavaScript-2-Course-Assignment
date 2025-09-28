@@ -46,7 +46,7 @@ export function getAuthHeaders() {
     
     return {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token || ''}`,
+      'Authorization': `Bearer ${token}`,
       'X-Noroff-API-Key': apiKey,
     };
   }
