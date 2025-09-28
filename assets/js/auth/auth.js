@@ -44,17 +44,11 @@ export function getAuthHeaders() {
     const token = localStorage.getItem('accessToken');
     const apiKey = '63c75ef6-8dce-41bb-99ce-34f4730e150e';
     
-    const headers = {
+    return {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
       'X-Noroff-API-Key': apiKey,
     };
-    
-    // Add authorization header if token exists
-    if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-    }
-    
-    return headers;
   }
 
 export async function register(email, password, confirmPassword, name = '') {
