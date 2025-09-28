@@ -10,6 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeHomePagePosts();
 });
 
+/**
+ * Initialize the home page posts.
+ *
+ * @returns {void}
+ */
 function initializeHomePagePosts() {
     const spinnerContainer = document.getElementById('postsLoading');
     const errorAlert = document.getElementById('postsError');
@@ -37,6 +42,14 @@ function initializeHomePagePosts() {
     renderAllPosts(spinnerContainer, errorAlert, postsContainer);
 }
 
+/**
+ * Render all posts.
+ *
+ * @param {HTMLElement} spinnerContainer - The spinner container element.
+ * @param {HTMLElement} errorAlert - The error alert element.
+ * @param {HTMLElement} postsContainer - The posts container element.
+ * @returns {Promise<void>}
+ */
 async function renderAllPosts(spinnerContainer, errorAlert, postsContainer) {
     try {
         const result = await getAllPosts();
@@ -63,6 +76,12 @@ async function renderAllPosts(spinnerContainer, errorAlert, postsContainer) {
     }
 }
 
+/**
+ * Setup the search for the posts.
+ *
+ * @param {HTMLElement} postsContainer - The posts container element.
+ * @returns {void}
+ */
 function setupSearch(postsContainer) {
     const searchInput = document.getElementById('postsSearch');
     const clearButton = document.getElementById('clearSearch');
@@ -92,6 +111,12 @@ function setupSearch(postsContainer) {
 
 
 
+/**
+ * Create HTML for a post card.
+ *
+ * @param {Object} post - Post object.
+ * @returns {string} HTML string.
+ */
 function createPostCardHtml(post) {
     const title = sanitizeText(post?.title) || 'Untitled';
     const body = sanitizeText(post?.body) || '';
@@ -138,12 +163,21 @@ function createPostCardHtml(post) {
     </div>`;
 }
 
+/**
+ * Get the likes key.
+ *
+ * @returns {string}
+ */
 function getLikesKey() {
     const username = localStorage.getItem('userName');
     return `localLikedPosts:${username}`;
 }
   
- // Translation
+/**
+ * Get the local likes map.
+ *
+ * @returns {Object}
+ */
 function getLocalLikesMap() {
     try {
         const raw = localStorage.getItem(getLikesKey());
@@ -153,6 +187,12 @@ function getLocalLikesMap() {
     }
 }
   
+/**
+ * Set the local post like.
+ *
+ * @param {string|number} postId
+ * @param {boolean} isLiked
+ */
 function setLocalPostLike(postId, isLiked) {
     const map = getLocalLikesMap();
     if (isLiked) {
@@ -163,12 +203,23 @@ function setLocalPostLike(postId, isLiked) {
     localStorage.setItem(getLikesKey(), JSON.stringify(map));
 }
   
+/**
+ * Check if the post is locally liked.
+ *
+ * @param {string|number} postId
+ * @returns {boolean}
+ */
 function isPostLocallyLiked(postId) {
     return !!getLocalLikesMap()
     [String(postId)];
 }
 
-// Fetch from the API and get the returned amount of reacts
+/**
+ * Set up the reactions for the posts container.
+ *
+ * @param {HTMLElement} postsContainer - The posts container element.
+ * @returns {Promise<void>}
+ */
 function setupReactions(postsContainer) {
     if (!postsContainer) return;
     postsContainer.addEventListener('click', async (event) => {
@@ -225,19 +276,35 @@ function setupReactions(postsContainer) {
 }
 
 
-// Cutting text to have controll over how much text are beeing used on the cards in homepage.
+/**
+ * Truncate text to a max length.
+ *
+ * @param {string} text
+ * @param {number} max
+ * @returns {string}
+ */
 function truncate(text, max) {
     if (!text) return '';
     return text.length > max ? `${text.slice(0, max - 1)}…` : text;
 }
 
-// Safety in case text suddenly display HTML code or anything else than normal text.
+/**
+ * Sanitize text for safe HTML output.
+ *
+ * @param {string} value
+ * @returns {string}
+ */
 function sanitizeText(value) {
     if (typeof value !== 'string') return '';
     return value.replace(/[<>]/g, '');
 }
 
-// Protection for unsafe/invalid URL´s.
+/**
+ * Sanitize a URL string.
+ *
+ * @param {string} url
+ * @returns {string}
+ */
 function sanitizeUrl(url) {
     if (typeof url !== 'string') return '';
     try {
@@ -248,7 +315,12 @@ function sanitizeUrl(url) {
     }
 }
 
-// Cleans up the shown date on cards.
+/**
+ * Format a date string for display.
+ *
+ * @param {string} dateString
+ * @returns {string}
+ */
 function formatDate(iso) {
     if (!iso) return '';
     try {

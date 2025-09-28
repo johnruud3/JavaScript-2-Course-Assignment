@@ -1,3 +1,8 @@
+/**
+ * Generate the HTML for the page header/navbar.
+ *
+ * @returns {string} The header HTML string.
+ */
 function getHeader() {
     return `
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
@@ -58,6 +63,11 @@ function getHeader() {
     `;
 }
 
+/**
+ * Generate the HTML for the page footer.
+ *
+ * @returns {string} The footer HTML string.
+ */
 function getFooter() {
     return `
     <footer class="bg-dark text-light py-4 mt-5">
@@ -82,6 +92,11 @@ function getFooter() {
     `;
 }
 
+/**
+ * Load the components for the page.
+ *
+ * @returns {void}
+ */
 function loadComponents() {
     document.body.classList.add('d-flex', 'flex-column', 'min-vh-100');
     
@@ -103,7 +118,11 @@ function loadComponents() {
     setActiveNavLink();
 }
 
-// Set active navigation link based on the current page you are on
+/**
+ * Set active navigation link based on the current page.
+ *
+ * @returns {void}
+ */
 function setActiveNavLink() {
     const currentPath = window.location.pathname;
     const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
@@ -119,6 +138,11 @@ function setActiveNavLink() {
     });
 }
 
+/**
+ * Set the favicon for the page.
+ *
+ * @returns {void}
+ */
 function setFavicon() {
     
     // The logo/icon as a favicon
@@ -133,7 +157,11 @@ function setFavicon() {
 
 export { loadComponents, setFavicon };
 
-// Global logout function
+/**
+ * Global logout function.
+ *
+ * @returns {void}
+ */
 window.handleLogout = () => {
     if (confirm('Are you sure you want to logout?')) {
        

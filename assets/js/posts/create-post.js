@@ -16,6 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', handleCreatePost);
 });
 
+/**
+ * Handle the form submission to create a new post.
+ *
+ * @param {Event} e - The form submit event.
+ * @returns {Promise<void>}
+ */
 async function handleCreatePost(e) {
     e.preventDefault();
     
@@ -27,26 +33,23 @@ async function handleCreatePost(e) {
     const postData = {
         title: titleInput.value.trim(),
         body: contentInput.value.trim(),
-      };
+    };
 
-      const url = (mediaUrlInput.value || '').trim();
-      const alt = (mediaAltInput.value || '').trim();
-      if (url) {
-        postData.media = {
-          url: url,
-          alt: alt
-        };
-      }
+    const url = (mediaUrlInput.value || '').trim();
+    const alt = (mediaAltInput.value || '').trim();
+    if (url) {
+        postData.media = { url, alt };
+    }
     
     try {
         const result = await createPost(postData);
         if (result.success) {
-          alert('Post created successfully!');
-          window.location.href = '../../index.html';
+            alert('Post created successfully!');
+            window.location.href = '../../index.html';
         } else {
-          alert(result.message || 'Failed to create post');
+            alert(result.message || 'Failed to create post');
         }
-      } catch (error) {
+    } catch (error) {
         alert('Network error - please try again');
-      }
+    }
 }

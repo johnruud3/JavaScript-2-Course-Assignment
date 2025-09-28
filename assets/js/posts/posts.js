@@ -1,5 +1,15 @@
 import { getAuthHeaders } from '../auth/auth.js';
 
+/**
+ * Create a new post.
+ *
+ * @param {Object} postData - The post data to send.
+ * @param {string} postData.title - The post title.
+ * @param {string} postData.body - The post content.
+ * @param {Array<string>} [postData.tags] - Optional tags for the post.
+ * @param {Object} [postData.media] - Optional media object { url, alt }.
+ * @returns {Promise<Object>} Result object with success flag and message.
+ */
 export async function createPost(postData) {
     try {
         const response = await fetch('https://v2.api.noroff.dev/social/posts', {
@@ -28,7 +38,11 @@ export async function createPost(postData) {
   }
 }
 
-// Get all posts from the API
+/**
+ * Get all posts from the API.
+ *
+ * @returns {Promise<Object>} Result object with success flag, data array, and meta info.
+ */
 export async function getAllPosts() {
     try {
         const response = await fetch('https://v2.api.noroff.dev/social/posts?_author=true&_reactions=true', {
@@ -51,7 +65,12 @@ export async function getAllPosts() {
     }
 }
 
-// Get all posts by a specific profile, with URL safety for username.
+/**
+ * Get all posts by a specific profile.
+ *
+ * @param {string} profileName - The profile name.
+ * @returns {Promise<Object>} Result object with success flag, data array, and meta info.
+ */
 export async function getPostsByProfile(profileName) {
     if (!profileName) {
         return { success: false, message: 'Profile name is required' };
@@ -77,6 +96,12 @@ export async function getPostsByProfile(profileName) {
     }
 }
 
+/**
+ * Get a single post by ID.
+ *
+ * @param {string} id - The post ID.
+ * @returns {Promise<Object>} Result object with success flag and post data.
+ */
 export async function getPost(id) {
     try {
         const response = await fetch(`https://v2.api.noroff.dev/social/posts/${id}?_author=true&_reactions=true`, {
@@ -99,7 +124,13 @@ export async function getPost(id) {
     }
 }
 
-// Update a post
+/**
+ * Update a post by ID.
+ *
+ * @param {string} id - The post ID.
+ * @param {Object} postData - The updated post data.
+ * @returns {Promise<Object>} Result object with success flag and message.
+ */
 export async function updatePost(id, postData) {
     try {
         const response = await fetch(`https://v2.api.noroff.dev/social/posts/${id}`, {
@@ -128,6 +159,13 @@ export async function updatePost(id, postData) {
     }
 }
 
+
+/**
+ * Delete a post by ID.
+ *
+ * @param {string} id - The post ID.
+ * @returns {Promise<Object>} Result object with success flag and message.
+ */
 export async function deletePost(id) {
     try {
         const response = await fetch(`https://v2.api.noroff.dev/social/posts/${id}`, {

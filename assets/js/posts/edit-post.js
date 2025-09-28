@@ -34,13 +34,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     deleteBtn.addEventListener('click', () => handleDeletePost(postId));
 });
 
+/**
+ * Load post data into the edit form.
+ *
+ * @param {string} postId - The ID of the post to load.
+ * @returns {Promise<void>}
+ */
 async function loadPostData(postId) {
     try {
         const result = await getPost(postId);
         if (result.success) {
             const post = result.data;
             
-            // Fill the form with existing data
             document.getElementById('title').value = post.title || '';
             document.getElementById('content').value = post.body || '';
             document.getElementById('mediaUrl').value = post.media?.url || '';
@@ -55,6 +60,13 @@ async function loadPostData(postId) {
     }
 }
 
+/**
+ * Handle editing/updating a post.
+ *
+ * @param {Event} e - The form submit event.
+ * @param {string} postId - The ID of the post to update.
+ * @returns {Promise<void>}
+ */
 async function handleEditPost(e, postId) {
     e.preventDefault();
     
@@ -71,10 +83,7 @@ async function handleEditPost(e, postId) {
     const url = (mediaUrlInput.value || '').trim();
     const alt = (mediaAltInput.value || '').trim();
     if (url) {
-        postData.media = {
-            url: url,
-            alt: alt
-        };
+        postData.media = { url, alt };
     }
     
     try {
@@ -90,6 +99,12 @@ async function handleEditPost(e, postId) {
     }
 }
 
+/**
+ * Handle deleting a post.
+ *
+ * @param {string} postId - The ID of the post to delete.
+ * @returns {Promise<void>}
+ */
 async function handleDeletePost(postId) {
     if (!confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
         return;

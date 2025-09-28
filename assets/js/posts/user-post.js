@@ -19,6 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initUserPostsPage();
 });
 
+/**
+ * Initialize the user posts page by extracting the author from the URL
+ * and rendering their posts.
+ */
 function initUserPostsPage() {
     const params = new URLSearchParams(window.location.search);
     const author = params.get('author');
@@ -33,6 +37,13 @@ function initUserPostsPage() {
     renderUserPosts(author, gridEl);
 }
 
+/**
+ * Render the user's posts and set up reactions.
+ *
+ * @param {string} authorName - The author's name.
+ * @param {HTMLElement} gridEl - The grid element to render posts.
+ * @returns {Promise<void>}
+ */
 async function renderUserPosts(authorName, gridEl) {
     setupReactions(gridEl);
     const res = await getPostsByProfile(authorName);
@@ -42,11 +53,23 @@ async function renderUserPosts(authorName, gridEl) {
         : '<div class="col-12"><div class="alert alert-info m-0">No posts yet.</div></div>';
 }
 
+/**
+ * Sanitize text for safe HTML output.
+ *
+ * @param {string} value
+ * @returns {string}
+ */
 function sanitizeText(value) {
     if (typeof value !== 'string') return '';
     return value.replace(/[<>]/g, '');
 }
 
+/**
+ * Create HTML for a post card.
+ *
+ * @param {Object} post - Post object.
+ * @returns {string} HTML string.
+ */
 function createPostCardHtml(post) {
     const title = sanitizeText(post?.title) || 'Untitled';
     const body = sanitizeText(post?.body) || '';
@@ -92,11 +115,24 @@ function createPostCardHtml(post) {
     </div>`;
 }
 
+/**
+ * Truncate text to a max length.
+ *
+ * @param {string} text
+ * @param {number} max
+ * @returns {string}
+ */
 function truncate(text, max) {
     if (!text) return '';
     return text.length > max ? `${text.slice(0, max - 1)}…` : text;
 }
 
+/**
+ * Sanitize a URL string.
+ *
+ * @param {string} url
+ * @returns {string}
+ */
 function sanitizeUrl(url) {
     if (typeof url !== 'string') return '';
     try {
@@ -107,6 +143,12 @@ function sanitizeUrl(url) {
     }
 }
 
+/**
+ * Format a date string for display.
+ *
+ * @param {string} dateString
+ * @returns {string}
+ */
 function formatDate(dateString) {
     if (!dateString) return '';
     try {
@@ -117,12 +159,21 @@ function formatDate(dateString) {
     }
 }
 
+/**
+ * Get local storage key for post likes.
+ *
+ * @returns {string}
+ */
 function getLikesKey() {
     const username = localStorage.getItem('userName');
     return `localLikedPosts:${username}`;
 }
   
- // Translation
+/**
+ * Get local likes map from localStorage.
+ *
+ * @returns {Object}
+ */
 function getLocalLikesMap() {
     try {
         const raw = localStorage.getItem(getLikesKey());
@@ -132,6 +183,12 @@ function getLocalLikesMap() {
     }
 }
   
+/**
+ * Set a post as liked/unliked.
+ *
+ * @param {string|number} postId
+ * @param {boolean} isLiked
+ */
 function setLocalPostLike(postId, isLiked) {
     const map = getLocalLikesMap();
     if (isLiked) {
@@ -142,12 +199,23 @@ function setLocalPostLike(postId, isLiked) {
     localStorage.setItem(getLikesKey(), JSON.stringify(map));
 }
   
+/**
+ * Check if a post is locally liked.
+ *
+ * @param {string|number} postId
+ * @returns {boolean}
+ */
 function isPostLocallyLiked(postId) {
     return !!getLocalLikesMap()
     [String(postId)];
 }
 
-// Fetch from the API and get the returned amount of reacts
+/**
+ * Set up reactions for a posts container.
+ *
+ * @param {HTMLElement} postsContainer - Posts container element.
+ * @returns {Promise<void>}
+ */
 function setupReactions(postsContainer) {
     if (!postsContainer) return;
     postsContainer.addEventListener('click', async (event) => {
@@ -186,7 +254,6 @@ function setupReactions(postsContainer) {
             const reactions = Array.isArray(result?.data?.reactions) ? result.data.reactions : [];
             const total = reactions.reduce((sum, r) => sum + Number(r?.count || 0), 0);
             if (countEl) countEl.textContent = String(total);
-            // Infer toggle from previous visual state; remember locally
             const isActive = !wasActive;
             setLocalPostLike(postId, isActive);
             button.classList.toggle('btn-primary', isActive);

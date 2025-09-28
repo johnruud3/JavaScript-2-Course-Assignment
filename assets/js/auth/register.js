@@ -4,12 +4,18 @@ import { register, isLoggedIn, getCurrentUser} from './auth.js';
 document.addEventListener('DOMContentLoaded', () => {
     setFavicon();
     loadComponents();
-     checkIfAlreadyLoggedIn();
+    checkIfAlreadyLoggedIn();
     
     const form = document.getElementById('registerForm');
     form.addEventListener('submit', handleRegister);
 });
 
+/**
+ * Handle the registration form submission.
+ *
+ * @param {Event} e - The form submit event.
+ * @returns {Promise<void>}
+ */
 async function handleRegister(e) {
     e.preventDefault();
     
@@ -33,7 +39,11 @@ async function handleRegister(e) {
     }
 }
 
-// Safety check incase user is already logged in
+/**
+ * Safety check incase user is already logged in.
+ *
+ * @returns {Promise<boolean>} True if the user is logged in, false otherwise.
+ */
 async function checkIfAlreadyLoggedIn() {
     if (isLoggedIn()) { 
         const user = getCurrentUser();

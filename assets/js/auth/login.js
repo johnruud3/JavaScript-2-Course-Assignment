@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setupLoginForm();
 });
 
+/**
+ * Setup the login form: handle submission and input validation.
+ */
 function setupLoginForm() {
     const loginForm = document.getElementById('loginForm');
     const emailInput = document.getElementById('email');
@@ -65,7 +68,6 @@ function setupLoginForm() {
         }
     });
     
-
     emailInput.addEventListener('blur', () => {
         const email = emailInput.value.trim();
         if (email && !isValidEmail(email)) {
@@ -75,17 +77,16 @@ function setupLoginForm() {
         }
     });
     
-    // Replace input handlers
-    emailInput.addEventListener('input', () => {
-        clearFieldError(emailInput);
-    });
-    
-    passwordInput.addEventListener('input', () => {
-        clearFieldError(passwordInput);
-    });
+    emailInput.addEventListener('input', () => clearFieldError(emailInput));
+    passwordInput.addEventListener('input', () => clearFieldError(passwordInput));
 }
 
-// Alert boxes for invalid or succsessfull login
+/**
+ * Show an alert message above the login form.
+ *
+ * @param {string} message - The message to display.
+ * @param {string} [type='info'] - Message type: 'success', 'error', or 'info'.
+ */
 function showMessage(message, type = 'info') {
     clearMessages();
     
@@ -99,24 +100,27 @@ function showMessage(message, type = 'info') {
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
     
-    // Message card, automaticly removes itself after 4 seconds
     const cardBody = document.querySelector('.card-body');
     cardBody.insertBefore(messageDiv, cardBody.firstChild);
     
     if (type === 'success') {
         setTimeout(() => {
-            if (messageDiv.parentNode) {
-                messageDiv.remove();
-            }
+            if (messageDiv.parentNode) messageDiv.remove();
         }, 4000);
     }
 }
 
+/** Clear all alert messages from the page */
 function clearMessages() {
     const alerts = document.querySelectorAll('.alert');
     alerts.forEach(alert => alert.remove());
 }
 
+/**
+ * Toggle loading state for the login form submit button.
+ *
+ * @param {boolean} loading - True to show loading, false to reset.
+ */
 function setLoadingState(loading) {
     const submitBtn = document.querySelector('button[type="submit"]');
     const form = document.getElementById('loginForm');
@@ -132,9 +136,14 @@ function setLoadingState(loading) {
     }
 }
 
+/**
+ * Show a field-specific error below the input element.
+ *
+ * @param {HTMLElement} field - The input element.
+ * @param {string} message - Error message to display.
+ */
 function showFieldError(field, message) {
     clearFieldError(field);
-    
     field.classList.add('is-invalid');
     
     const errorDiv = document.createElement('div');
@@ -144,17 +153,22 @@ function showFieldError(field, message) {
     field.parentNode.appendChild(errorDiv);
 }
 
+/** Clear field-specific error messages */
 function clearFieldError(field) {
     if (!field) return;
     field.classList.remove('is-invalid');
     const parent = field.parentNode;
     if (!parent) return;
     const errorDiv = parent.querySelector('.invalid-feedback');
-    if (errorDiv) {
-        errorDiv.remove();
-    }
+    if (errorDiv) errorDiv.remove();
 }
 
+/**
+ * Validate an email address format.
+ *
+ * @param {string} email - Email string to validate.
+ * @returns {boolean} True if email format is valid, false otherwise.
+ */
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);

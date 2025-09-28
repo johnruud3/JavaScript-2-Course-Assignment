@@ -1,5 +1,11 @@
 // Authentication Hub
-
+/**
+ * Log in a user with email and password.
+ *
+ * @param {string} email - The user's email address.
+ * @param {string} password - The user's password.
+ * @returns {Promise<{success: boolean, message: string}>} Response object indicating success or failure.
+ */
 export async function login(email, password) {
     if (!email || !password) {
         return { success: false, message: 'Email and password are required' };
@@ -12,13 +18,8 @@ export async function login(email, password) {
     try {
         const response = await fetch('https://v2.api.noroff.dev/auth/login', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
         });
         
         const result = await response.json();
@@ -40,17 +41,31 @@ export async function login(email, password) {
     }
 }
 
+/**
+ * Get authentication headers for API requests.
+ *
+ * @returns {Object} Headers object including Content-Type, Authorization, and X-Noroff-API-Key.
+ */
 export function getAuthHeaders() {
     const token = localStorage.getItem('accessToken');
     const apiKey = '63c75ef6-8dce-41bb-99ce-34f4730e150e';
     
     return {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-      'X-Noroff-API-Key': apiKey,
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'X-Noroff-API-Key': apiKey,
     };
-  }
+}
 
+/**
+ * Register a new user.
+ *
+ * @param {string} email - The user's email address (must be @stud.noroff.no).
+ * @param {string} password - The user's password.
+ * @param {string} confirmPassword - Password confirmation.
+ * @param {string} [name] - Optional user name; defaults to email username.
+ * @returns {Promise<{success: boolean, message: string}>} Response object indicating success or failure.
+ */
 export async function register(email, password, confirmPassword, name = '') {
     console.log('Register function called with email:', email); 
     
@@ -77,13 +92,11 @@ export async function register(email, password, confirmPassword, name = '') {
     try {
         const response = await fetch('https://v2.api.noroff.dev/auth/register', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name: name || email.split('@')[0],
-                email: email,
-                password: password
+                email,
+                password
             })
         });
         
@@ -93,16 +106,21 @@ export async function register(email, password, confirmPassword, name = '') {
             return { success: true, message: 'Registration successful! You can now log in.' };
         } else {
             let errorMessage = 'Registration failed';
-        if (result.errors && result.errors.length > 0) {
-            errorMessage = result.errors[0].message;
-        }
-        return { success: false, message: errorMessage };
+            if (result.errors && result.errors.length > 0) {
+                errorMessage = result.errors[0].message;
+            }
+            return { success: false, message: errorMessage };
         }
     } catch (error) {
         return { success: false, message: 'Network error' };
     }
 }
 
+/**
+ * Log out the current user and clear local storage.
+ *
+ * @returns {{success: boolean, message: string}} Response object indicating logout success.
+ */
 export function logout() {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('userEmail');
@@ -111,12 +129,15 @@ export function logout() {
     return { success: true, message: 'Logged out successfully' };
 }
 
-// Check if the user is logged in
+/**
+ * Check if the user is logged in.
+ *
+ * @returns {boolean} True if user is logged in and has a valid token, false otherwise.
+ */
 export function isLoggedIn() {
     const token = localStorage.getItem('accessToken');
     const isLoggedInFlag = localStorage.getItem('isLoggedIn') === 'true';
     
-    // If no token but flag says logged in, clear the flag
     if (!token && isLoggedInFlag) {
         localStorage.removeItem('isLoggedIn');
         return false;
@@ -125,7 +146,9 @@ export function isLoggedIn() {
     return isLoggedInFlag && !!token;
 }
 
-// Handle authentication errors and redirect to login
+/**
+ * Handle authentication errors and redirect to login.
+ */
 export function handleAuthError() {
     console.log('Authentication error detected, redirecting to login...');
     localStorage.removeItem('isLoggedIn');
@@ -133,13 +156,17 @@ export function handleAuthError() {
     localStorage.removeItem('userName');
     localStorage.removeItem('userEmail');
     
-    // Show user-friendly message
     if (typeof window !== 'undefined') {
         alert('Your session has expired. Please login again.');
         window.location.href = '/pages/auth/login.html';
     }
 }
 
+/**
+ * Get the current logged-in user's info.
+ *
+ * @returns {{email: string, name: string, isLoggedIn: boolean}|null} User object or null if not logged in.
+ */
 export function getCurrentUser() {
     if (!isLoggedIn()) {
         return null;
@@ -152,7 +179,12 @@ export function getCurrentUser() {
     };
 }
 
-// Helper functions (Checks if it is a valid email)
+/**
+ * Helper function (Checks if it is a valid email)
+ *
+ * @param {string} email - Email to validate.
+ * @returns {boolean} True if the email is valid, false otherwise.
+ */
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
