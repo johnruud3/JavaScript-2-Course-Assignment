@@ -43,11 +43,18 @@ export async function login(email, password) {
 export function getAuthHeaders() {
     const token = localStorage.getItem('accessToken');
     const apiKey = '63c75ef6-8dce-41bb-99ce-34f4730e150e';
-    return {
+    
+    const headers = {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
       'X-Noroff-API-Key': apiKey,
     };
+    
+    // Add authorization header if token exists
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    
+    return headers;
   }
 
 export async function register(email, password, confirmPassword, name = '') {
@@ -112,7 +119,31 @@ export function logout() {
 
 // Check if the user is logged in
 export function isLoggedIn() {
-    return localStorage.getItem('isLoggedIn') === 'true';
+    const token = localStorage.getItem('accessToken');
+    const isLoggedInFlag = localStorage.getItem('isLoggedIn') === 'true';
+    
+    // If no token but flag says logged in, clear the flag
+    if (!token && isLoggedInFlag) {
+        localStorage.removeItem('isLoggedIn');
+        return false;
+    }
+    
+    return isLoggedInFlag && !!token;
+}
+
+// Handle authentication errors and redirect to login
+export function handleAuthError() {
+    console.log('Authentication error detected, redirecting to login...');
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    
+    // Show user-friendly message
+    if (typeof window !== 'undefined') {
+        alert('Your session has expired. Please login again.');
+        window.location.href = '/pages/auth/login.html';
+    }
 }
 
 export function getCurrentUser() {
