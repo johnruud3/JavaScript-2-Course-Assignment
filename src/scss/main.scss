@@ -1,0 +1,13 @@
+// 1. Import custom variables first (to override Bootstrap defaults)
+@import 'variables';
+
+// 2. Import Bootstrap
+@import '../../node_modules/bootstrap/scss/bootstrap';
+
+// 3. Import custom global styles
+@import 'custom';
+
+// 4. Import page-specific styles
+@import 'pages/home';
+@import 'pages/login';
+@import 'pages/create-post';
