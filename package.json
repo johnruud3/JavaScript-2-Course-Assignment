@@ -1,0 +1,20 @@
+{
+  "name": "javascript-2-course-assignment",
+  "version": "1.0.0",
+  "description": "This is my JavaScript 2 Course Assignment for 2025 Name: John-Kristian G. Ruud School: Noroff, Bergen",
+  "main": "index.js",
+  "scripts": {
+    "dev": "sass --watch src/scss:dist/css",
+    "build": "sass src/scss:dist/css --style=compressed --no-source-map",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^5.3.8"
+  },
+  "devDependencies": {
+    "sass": "^1.93.3"
+  }
+}

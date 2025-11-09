@@ -1,0 +1,99 @@
+// Homepage Styles (index.html)
+
+// Hero Section
+.container {
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: $dark;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
+// Search Bar Specific Styles
+#postsSearch {
+    font-size: 1.125rem;
+    padding: 0.75rem 1rem;
+
+    &::placeholder {
+        color: #adb5bd;
+    }
+}
+
+#clearSearch {
+    background-color: $brand-primary;
+    border-color: $brand-primary;
+
+    &:hover {
+        background-color: darken($brand-primary, 10%);
+        border-color: darken($brand-primary, 10%);
+    }
+}
+
+// Posts Grid
+#postsGrid {
+    .card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background: white;
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            border-radius: $border-radius-lg $border-radius-lg 0 0;
+        }
+
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+
+            .card-title {
+                color: $brand-primary;
+                font-weight: 600;
+                margin-bottom: 0.75rem;
+            }
+
+            .card-text {
+                flex: 1;
+                color: $secondary;
+                line-height: 1.6;
+            }
+        }
+
+        .card-footer {
+            background: transparent;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+            small {
+                color: $secondary;
+            }
+        }
+    }
+}
+
+// Loading State
+#postsLoading {
+    .spinner-border {
+        color: $brand-primary;
+    }
+}
+
+// Error Alert
+#postsError {
+    border-radius: $border-radius-lg;
+    box-shadow: $box-shadow-sm;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+    .container h1 {
+        font-size: 2rem;
+    }
+
+    #postsSearch {
+        font-size: 1rem;
+    }
+}
