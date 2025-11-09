@@ -1,0 +1,131 @@
+// Custom Global Styles
+// Apply across all pages
+
+// Body & Layout
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+main {
+    flex: 1;
+}
+
+// Custom Typography
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: $dark;
+    font-weight: $headings-font-weight;
+}
+
+.lead {
+    color: $secondary;
+    font-size: 1.125rem;
+}
+
+// Enhanced Cards
+.card {
+    border: none;
+    box-shadow: $card-box-shadow;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: $box-shadow-lg;
+    }
+}
+
+// Custom Buttons
+.btn {
+    font-weight: $btn-font-weight;
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: $box-shadow-sm;
+    }
+}
+
+.btn-info {
+    background-color: $brand-primary;
+    border-color: $brand-primary;
+    color: white;
+
+    &:hover {
+        background-color: darken($brand-primary, 10%);
+        border-color: darken($brand-primary, 10%);
+    }
+}
+
+// Enhanced Forms
+.form-control {
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+
+    &:focus {
+        border-color: $brand-primary;
+        box-shadow: $input-focus-box-shadow;
+    }
+}
+
+.form-label {
+    font-weight: 500;
+    color: $dark;
+    margin-bottom: 0.5rem;
+}
+
+// Loading Spinner
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+// Search Bar Enhancement
+.input-group {
+    box-shadow: $box-shadow-sm;
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+
+    .input-group-text {
+        background-color: $brand-primary;
+        border: none;
+    }
+
+    .form-control {
+        border: none;
+
+        &:focus {
+            box-shadow: none;
+        }
+    }
+
+    .btn {
+        border: none;
+    }
+}
+
+// Utility Classes
+.shadow-custom {
+    box-shadow: $box-shadow;
+}
+
+.shadow-custom-lg {
+    box-shadow: $box-shadow-lg;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .lead {
+        font-size: 1rem;
+    }
+}
