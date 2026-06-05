@@ -51,6 +51,20 @@ function initializeHomePagePosts() {
  * @returns {Promise<void>}
  */
 async function renderAllPosts(spinnerContainer, errorAlert, postsContainer) {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  if (!isLoggedIn) {
+    spinnerContainer.classList.add('d-none');
+    postsContainer.innerHTML = `
+      <div class="col-12 text-center py-5">
+        <i class="bi bi-people fs-1 text-secondary"></i>
+        <h2 class="mt-3">Create an account to see posts</h2>
+        <p class="text-muted">Join Feed Me to read and share posts with the community.</p>
+        <a href="/pages/auth/login.html" class="btn btn-info text-white me-2">Login</a>
+        <a href="/pages/auth/register.html" class="btn btn-outline-secondary">Register</a>
+      </div>`;
+    return;
+  }
+
   try {
     const result = await getAllPosts();
     if (!result.success) {
