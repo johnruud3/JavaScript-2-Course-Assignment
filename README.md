@@ -48,4 +48,4 @@ No `.env` file is needed. The API key is included in the source for academic pur
 
 ## Author
 
-John-Kristian G. Ruud — Noroff, Bergen
+johnruud3
